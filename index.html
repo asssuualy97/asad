@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>एक छोटी सी बात... ❤️</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --pink:#ff5f7e;
+  --pink2:#ff8da3;
+  --purple:#b9a8ff;
+  --gold:#ffd477;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+}
+
+body{
+  font-family:'Noto Sans Devanagari',sans-serif;
+  background:
+    radial-gradient(circle at 50% 0%,#681e45 0%,#3a1128 45%,#180913 100%);
+  color:#fff;
+  overflow:hidden;
+}
+
+#app{
+  position:relative;
+  width:100%;
+  max-width:460px;
+  height:100vh;
+  margin:auto;
+  overflow:hidden;
+}
+
+#hearts{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+
+.heart{
+  position:absolute;
+  bottom:-50px;
+  opacity:0;
+  animation:floatHeart linear forwards;
+  filter:drop-shadow(0 0 7px rgba(255,95,126,.7));
+}
+
+@keyframes floatHeart{
+  0%{
+    transform:translateY(0) translateX(0) rotate(0);
+    opacity:0;
+  }
+  10%{opacity:.7}
+  100%{
+    transform:translateY(-110vh) translateX(var(--drift)) rotate(360deg);
+    opacity:0;
+  }
+}
+
+.screen{
+  position:absolute;
+  inset:0;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:25px;
+  z-index:2;
+  overflow-y:auto;
+}
+
+.screen.active{
+  display:flex;
+  animation:appear .6s ease;
+}
+
+@keyframes appear{
+  from{
+    opacity:0;
+    transform:scale(.96) translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:scale(1) translateY(0);
+  }
+}
+
+.card{
+  width:100%;
+  max-width:330px;
+  padding:38px 25px;
+  border-radius:28px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(12px);
+  box-shadow:0 25px 70px rgba(0,0,0,.4);
+}
+
+.intro-emoji{
+  font-size:58px;
+  margin-bottom:15px;
+  animation:wave 2s infinite;
+}
+
+@keyframes wave{
+  0%,100%{transform:rotate(0)}
+  25%{transform:rotate(12deg)}
+  50%{transform:rotate(-8deg)}
+}
+
+.intro-text{
+  font-size:18px;
+  line-height:2;
+  color:#ffe7ed;
+}
+
+.intro-text b{
+  color:#fff;
+}
+
+.note{
+  margin-top:15px;
+  font-size:12px;
+  color:#ffbdcc;
+}
+
+.btn{
+  margin-top:24px;
+  border:0;
+  padding:14px 31px;
+  border-radius:50px;
+  color:#fff;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(120deg,var(--pink),var(--pink2));
+  box-shadow:0 10px 28px rgba(255,95,126,.45);
+  transition:.2s;
+}
+
+.btn:active{
+  transform:scale(.94);
+}
+
+.load-heart{
+  font-size:65px;
+  animation:beat 1.2s infinite;
+}
+
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  25%{transform:scale(1.15)}
+  45%{transform:scale(1)}
+  65%{transform:scale(1.1)}
+}
+
+#loadText{
+  margin-top:20px;
+  min-height:55px;
+  font-size:17px;
+  color:#ffd6e0;
+}
+
+.bar{
+  width:280px;
+  height:8px;
+  margin-top:18px;
+  background:rgba(255,255,255,.15);
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.fill{
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,var(--pink),var(--purple));
+  border-radius:20px;
+}
+
+#percent{
+  margin-top:8px;
+  font-size:13px;
+  color:#ffb9c9;
+}
+
+.envelope{
+  position:relative;
+  width:230px;
+  height:155px;
+  cursor:pointer;
+  filter:drop-shadow(0 20px 25px rgba(0,0,0,.4));
+}
+
+.env-back{
+  position:absolute;
+  inset:0;
+  border-radius:12px;
+  background:linear-gradient(145deg,#ffeaf0,#ffcbd8);
+}
+
+.env-letter{
+  position:absolute;
+  left:15px;
+  right:15px;
+  bottom:10px;
+  height:25px;
+  background:white;
+  border-radius:6px;
+  z-index:2;
+  transition:.6s;
+}
+
+.env-flap{
+  position:absolute;
+  top:0;
+  left:0;
+  width:0;
+  height:0;
+  border-left:115px solid transparent;
+  border-right:115px solid transparent;
+  border-top:82px solid #ffc3d2;
+  transform-origin:top;
+  transition:.7s;
+  z-index:4;
+}
+
+.envelope.open .env-flap{
+  transform:rotateX(180deg);
+}
+
+.envelope.open .env-letter{
+  height:115px;
+  transform:translateY(-55px);
+}
+
+.hint{
+  margin-top:30px;
+  color:#ffd4df;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  50%{opacity:.45}
+}
+
+.message-card{
+  width:100%;
+  max-width:340px;
+  background:linear-gradient(160deg,#fff,#ffeef2);
+  color:#492033;
+  border-radius:28px;
+  padding:36px 25px 30px;
+  box-shadow:0 25px 70px rgba(0,0,0,.45);
+}
+
+.eyebrow{
+  font-family:'Dancing Script',cursive;
+  color:var(--pink);
+  font-size:40px;
+  margin-bottom:20px;
+}
+
+#messageText{
+  min-height:210px;
+  font-size:17px;
+  line-height:1.9;
+  font-weight:500;
+}
+
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:20px;
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#c9aeb8;
+}
+
+.dot.active{
+  width:20px;
+  border-radius:10px;
+  background:var(--pink);
+}
+
+.question-icon{
+  font-size:60px;
+  margin-bottom:15px;
+}
+
+.question-title{
+  font-size:27px;
+  font-weight:800;
+  line-height:1.5;
+  margin-bottom:25px;
+}
+
+.options{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+}
+
+.option{
+  border:0;
+  padding:13px 20px;
+  border-radius:50px;
+  color:white;
+  font-family:inherit;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  background:linear-gradient(120deg,var(--pink),var(--purple));
+}
+
+.story-heart{
+  font-size:70px;
+  animation:beat 1.3s infinite;
+}
+
+.story-title{
+  font-family:'Dancing Script',cursive;
+  font-size:50px;
+  color:var(--gold);
+  margin-top:10px;
+}
+
+.story-text{
+  margin-top:18px;
+  max-width:320px;
+  font-size:16px;
+  line-height:1.9;
+  color:#ffe4ea;
+}
+
+.final-card{
+  width:100%;
+  max-width:335px;
+  padding:38px 25px;
+  border-radius:28px;
+  background:rgba(0,0,0,.3);
+  border:1px solid rgba(255,255,255,.17);
+  backdrop-filter:blur(10px);
+}
+
+.final-question{
+  font-size:26px;
+  font-weight:800;
+  line-height:1.55;
+}
+
+.yes{
+  width:100%;
+  margin-top:25px;
+  padding:16px;
+  border:0;
+  border-radius:50px;
+  color:white;
+  background:linear-gradient(120deg,var(--pink),var(--pink2));
+  box-shadow:0 12px 30px rgba(255,95,126,.5);
+  font-family:inherit;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.no{
+  margin-top:15px;
+  padding:12px 22px;
+  border-radius:50px;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.08);
+  color:#ffd6e0;
+  font-family:inherit;
+  cursor:pointer;
+}
+
+.yay{
+  font-family:'Dancing Script',cursive;
+  font-size:62px;
+  color:var(--gold);
+  animation:pop .8s ease;
+}
+
+@keyframes pop{
+  0%{transform:scale(.3);opacity:0}
+  70%{transform:scale(1.15)}
+  100%{transform:scale(1)}
+}
+
+.celebrate{
+  max-width:325px;
+  margin-top:18px;
+  font-size:16px;
+  line-height:1.9;
+  color:#ffe4ea;
+}
+
+.big-heart{
+  font-size:65px;
+  margin-top:18px;
+  animation:beat 1.2s infinite;
+}
+
+/* LOVE PAGES */
+
+.love-heart{
+  font-size:75px;
+  animation:beat 1.3s infinite;
+}
+
+.love-title{
+  font-family:'Dancing Script',cursive;
+  font-size:55px;
+  color:var(--gold);
+  text-shadow:
+    0 0 12px rgba(255,212,119,.7),
+    0 0 35px rgba(255,95,126,.6);
+}
+
+.love-name{
+  margin-top:5px;
+  font-size:20px;
+  font-weight:700;
+}
+
+.love-message{
+  margin-top:17px;
+  max-width:320px;
+  font-size:15px;
+  line-height:1.9;
+  color:#ffe4ea;
+}
+
+.write-box{
+  width:100%;
+  max-width:315px;
+  margin-top:20px;
+  padding:17px;
+  border-radius:20px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.16);
+}
+
+.write-title{
+  font-size:14px;
+  color:#ffd2dc;
+  margin-bottom:10px;
+}
+
+.loveInput{
+  width:100%;
+  height:80px;
+  resize:none;
+  border:0;
+  outline:0;
+  border-radius:14px;
+  padding:12px;
+  font-family:inherit;
+  font-size:14px;
+  color:#542335;
+  background:#fff1f4;
+}
+
+.count{
+  text-align:right;
+  margin-top:5px;
+  font-size:11px;
+  color:#ffb9c9;
+}
+
+.save-note{
+  margin-top:10px;
+  font-size:10px;
+  color:#ffc4d1;
+  line-height:1.5;
+}
+
+.success{
+  font-size:18px;
+  line-height:2;
+  color:#ffe4ea;
+}
+
+.confetti{
+  position:absolute;
+  top:-30px;
+  z-index:30;
+  pointer-events:none;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(720deg);
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<div id="hearts"></div>
+
+<!-- INTRO -->
+
+<section class="screen active" id="intro">
+
+<div class="card">
+
+<div class="intro-emoji">👋</div>
+
+<div class="intro-text">
+
+हेलो <b id="herName">Aliza</b>... ❤️
+
+<br><br>
+
+मैं <b id="myName">Asad</b> हूँ।
+
+<br><br>
+
+तुम्हारे लिए मैंने कुछ बनाया है... 💌
+
+<br>
+
+शायद इसे देखकर तुम्हारे चेहरे पर
+एक प्यारी सी मुस्कान आ जाए। 😊
+
+</div>
+
+<button class="btn" onclick="startLoading()">
+खोलो 💌
+</button>
+
+<div class="note">
+अंदर थोड़ी सी प्यार वाली बातें हैं... 🥹
+</div>
+
+</div>
+
+</section>
+
+
+<!-- LOADING -->
+
+<section class="screen" id="loading">
+
+<div class="load-heart">💗</div>
+
+<div id="loadText">
+प्यार वाली तैयारी शुरू हो रही है...
+</div>
+
+<div class="bar">
+<div class="fill" id="fill"></div>
+</div>
+
+<div id="percent">0%</div>
+
+</section>
+
+
+<!-- ENVELOPE -->
+
+<section class="screen" id="envelopeScreen">
+
+<div class="envelope" id="envelope" onclick="openEnvelope()">
+
+<div class="env-letter"></div>
+<div class="env-back"></div>
+<div class="env-flap"></div>
+
+</div>
+
+<div class="hint" id="hint">
+लिफाफा खोलो 💌
+</div>
+
+</section>
+
+
+<!-- MESSAGES -->
+
+<section class="screen" id="messages">
+
+<div class="message-card">
+
+<div class="eyebrow">
+तुम्हारे लिए ❤️
+</div>
+
+<div id="messageText"></div>
+
+<div class="dots" id="messageDots"></div>
+
+<button class="btn" id="messageButton" onclick="nextMessage()">
+आगे 💗
+</button>
+
+</div>
+
+</section>
+
+
+<!-- QUESTIONS -->
+
+<section class="screen" id="questionScreen">
+
+<div class="card">
+
+<div class="question-icon" id="qIcon">
+☕
+</div>
+
+<div class="question-title" id="qTitle">
+क्या तुम मेरे साथ कॉफी पीने चलोगी?
+</div>
+
+<div class="options">
+
+<button class="option" id="option1" onclick="answer(this)">
+हाँ ❤️
+</button>
+
+<button class="option" id="option2" onclick="answer(this)">
+बिल्कुल 💗
+</button>
+
+</div>
+
+<div class="dots" id="qDots"></div>
+
+</div>
+
+</section>
+
+
+<!-- SPECIAL -->
+
+<section class="screen" id="special">
+
+<div class="card">
+
+<div class="story-heart">
+🫶
+</div>
+
+<div class="story-title">
+एक बात...
+</div>
+
+<div class="story-text">
+
+तुम मेरे लिए सिर्फ एक नाम नहीं हो।
+
+<br><br>
+
+तुम्हारी बातें,
+तुम्हारी मुस्कान,
+तुम्हारा simple सा nature...
+
+<br><br>
+
+मुझे सच में बहुत अच्छा लगता है। ❤️
+
+<br><br>
+
+इसलिए आज सोचा,
+दिल की बात दिल में रखने के बजाय
+तुमसे कह ही देता हूँ।
+
+</div>
+
+<button class="btn" onclick="go('story')">
+आगे ✨
+</button>
+
+</div>
+
+</section>
+
+
+<!-- STORY -->
+
+<section class="screen" id="story">
+
+<div class="story-heart">
+💗
+</div>
+
+<div class="story-title">
+हम ❤️
+</div>
+
+<div class="story-text">
+
+पता नहीं हमारी कहानी आगे कैसी होगी...
+
+<br><br>
+
+लेकिन एक बात जरूर है।
+
+<br><br>
+
+तुम मेरी जिंदगी में
+एक बहुत प्यारी feeling लेकर आई हो।
+
+<br><br>
+
+मैं बड़े-बड़े वादे नहीं करूँगा।
+
+<br><br>
+
+बस इतना कहना है...
+
+अगर तुम भी चाहो,
+तो हम एक खूबसूरत शुरुआत
+साथ में कर सकते हैं। 🤍
+
+</div>
+
+<button class="btn" onclick="go('ask')">
+आगे 💗
+</button>
+
+</section>
+
+
+<!-- ASK -->
+
+<section class="screen" id="ask">
+
+<div class="card">
+
+<div style="color:#ffc7d3">
+अच्छा...
+</div>
+
+<div style="font-size:31px;font-weight:800;line-height:1.4;margin:10px 0">
+एक सवाल<br>
+पूछूँ? 💗
+</div>
+
+<div style="font-size:13px;color:#ffc7d3">
+— <span id="askName">Asad</span>
+</div>
+
+<button class="btn" onclick="go('finalQuestion')">
+हाँ, पूछो 😊
+</button>
+
+</div>
+
+</section>
+
+
+<!-- FINAL QUESTION -->
+
+<section class="screen" id="finalQuestion">
+
+<div class="final-card">
+
+<div class="final-question">
+
+<span id="finalName">Aliza</span>,
+
+<br>
+
+क्या तुम मेरी
+गर्लफ्रेंड बनोगी? 💗
+
+</div>
+
+<button class="yes" onclick="sayYes()">
+🤍 हाँ
+</button>
+
+<button class="no" onclick="answerNo()">
+🙈 शायद नहीं
+</button>
+
+</div>
+
+</section>
+
+
+<!-- CELEBRATE -->
+
+<section class="screen" id="celebrate">
+
+<div class="yay">
+यायyyyy 💗
+</div>
+
+<div class="celebrate">
+
+तुमने हाँ कह दिया! 🥹❤️
+
+<br><br>
+
+मैं perfect होने का वादा नहीं करता...
+
+लेकिन तुम्हारी respect,
+तुम्हारी feelings और तुम्हारी खुशी
+मेरे लिए हमेशा important रहेगी। 🤍
+
+<br><br>
+
+अब तुम मेरी favourite notification हो। 😌💗
+
+</div>
+
+<div class="big-heart">
+💗
+</div>
+
+</section>
+
+
+<!-- LOVE 1 -->
+
+<section class="screen" id="love1">
+<div class="love-heart">❤️</div>
+<div class="love-title">I Love You</div>
+<div class="love-name">❤️ <span class="loveName"></span> ❤️</div>
+
+<div class="love-message">
+कुछ feelings ऐसी होती हैं
+जिन्हें words में पूरी तरह explain करना मुश्किल होता है। 🥹
+<br><br>
+बस इतना कहना है...
+<strong>I Love You ❤️</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">इस page पर तुम भी कुछ लिखो 💌</div>
+<textarea class="loveInput" maxlength="200" data-index="0"
+placeholder="तुम क्या कहना चाहती हो? ❤️"></textarea>
+<div class="count">0/200</div>
+<button class="btn" onclick="nextLove(0)">आगे 💗</button>
+</div>
+</section>
+
+
+<!-- LOVE 2 -->
+
+<section class="screen" id="love2">
+<div class="love-heart">🥺</div>
+<div class="love-title">I Really Miss You</div>
+<div class="love-name">💗 <span class="loveName"></span> 💗</div>
+
+<div class="love-message">
+कभी-कभी तुम्हारी बहुत याद आती है।
+<br><br>
+तुमसे थोड़ी सी बात भी
+दिन को थोड़ा और अच्छा बना देती है। 🌸
+<br><br>
+<strong>I Really Miss You 🥺❤️</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">अब यहाँ अपना message लिखो 💌</div>
+<textarea class="loveInput" maxlength="200" data-index="1"
+placeholder="कुछ भी लिख सकती हो... ❤️"></textarea>
+<div class="count">0/200</div>
+<button class="btn" onclick="nextLove(1)">आगे 💗</button>
+</div>
+</section>
+
+
+<!-- LOVE 3 -->
+
+<section class="screen" id="love3">
+<div class="love-heart">💕</div>
+<div class="love-title">I Like You</div>
+<div class="love-name">🌸 <span class="loveName"></span> 🌸</div>
+
+<div class="love-message">
+तुम्हारी बातें,
+तुम्हारा nature,
+और तुम्हारी छोटी-छोटी बातें...
+<br><br>
+मुझे बहुत पसंद हैं। 😊
+<br><br>
+<strong>I Like You ❤️</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">तुम भी कुछ कहना चाहो तो लिखो 💌</div>
+<textarea class="loveInput" maxlength="200" data-index="2"
+placeholder="अपनी बात यहाँ लिखो..."></textarea>
+<div class="count">0/200</div>
+<button class="btn" onclick="nextLove(2)">आगे 💗</button>
+</div>
+</section>
+
+
+<!-- LOVE 4 -->
+
+<section class="screen" id="love4">
+<div class="love-heart">🫶</div>
+<div class="love-title">You Are Special</div>
+<div class="love-name">✨ <span class="loveName"></span> ✨</div>
+
+<div class="love-message">
+हर कोई special नहीं होता।
+<br><br>
+लेकिन कुछ लोग अपनी presence से
+सब कुछ थोड़ा बेहतर बना देते हैं।
+<br><br>
+<strong>You Are Very Special To Me 🤍</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">तुम्हारी तरफ से कुछ? 💌</div>
+<textarea class="loveInput" maxlength="200" data-index="3"
+placeholder="यहाँ लिखो..."></textarea>
+<div class="count">0/200</div>
+<button class="btn" onclick="nextLove(3)">आगे 💗</button>
+</div>
+</section>
+
+
+<!-- LOVE 5 -->
+
+<section class="screen" id="love5">
+<div class="love-heart">🌸</div>
+<div class="love-title">You Make Me Smile</div>
+<div class="love-name">😊 <span class="loveName"></span> 😊</div>
+
+<div class="love-message">
+तुमसे बात करते हुए
+कई बार बिना किसी वजह के भी smile आ जाती है।
+<br><br>
+शायद यही तुम्हारी magic है। ✨
+<br><br>
+<strong>You Make Me Smile ❤️</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">अब तुम्हारी बारी 💌</div>
+<textarea class="loveInput" maxlength="200" data-index="4"
+placeholder="अपने words लिखो..."></textarea>
+<div class="count">0/200</div>
+<button class="btn" onclick="nextLove(4)">आगे 💗</button>
+</div>
+</section>
+
+
+<!-- LOVE 6 -->
+
+<section class="screen" id="love6">
+<div class="love-heart">🤍</div>
+<div class="love-title">You Matter</div>
+<div class="love-name">🫶 <span class="loveName"></span> 🫶</div>
+
+<div class="love-message">
+तुम्हारी feelings matter करती हैं।
+<br><br>
+तुम्हारी खुशी matter करती है।
+<br><br>
+और तुम्हारी respect हमेशा important रहेगी। 🤍
+<br><br>
+<strong>You Matter To Me ❤️</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">कुछ कहना है? 💌</div>
+<textarea class="loveInput" maxlength="200" data-index="5"
+placeholder="अपना message लिखो..."></textarea>
+<div class="count">0/200</div>
+<button class="btn" onclick="nextLove(5)">आगे 💗</button>
+</div>
+</section>
+
+
+<!-- LOVE 7 -->
+
+<section class="screen" id="love7">
+<div class="love-heart">🌙</div>
+<div class="love-title">Thinking Of You</div>
+<div class="love-name">💭 <span class="loveName"></span> 💭</div>
+
+<div class="love-message">
+दिन में कभी-कभी
+अचानक तुम्हारा ख्याल आ जाता है।
+<br><br>
+और चेहरे पर एक छोटी सी smile आ जाती है। 😊
+<br><br>
+<strong>I'm Thinking Of You ❤️</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">तुम क्या सोच रही हो? 💌</div>
+<textarea class="loveInput" maxlength="200" data-index="6"
+placeholder="यहाँ लिखो..."></textarea>
+<div class="count">0/200</div>
+<button class="btn" onclick="nextLove(6)">आगे 💗</button>
+</div>
+</section>
+
+
+<!-- LOVE 8 -->
+
+<section class="screen" id="love8">
+<div class="love-heart">💖</div>
+<div class="love-title">You Are Amazing</div>
+<div class="love-name">✨ <span class="loveName"></span> ✨</div>
+
+<div class="love-message">
+तुम जैसी हो,
+वैसी ही बहुत प्यारी हो।
+<br><br>
+तुम्हारी अपनी एक अलग ही जगह है। ❤️
+<br><br>
+<strong>You Are Amazing 🌸</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">तुम्हारा छोटा सा message 💌</div>
+<textarea class="loveInput" maxlength="200" data-index="7"
+placeholder="कुछ प्यारा सा लिखो..."></textarea>
+<div class="count">0/200</div>
+<button class="btn" onclick="nextLove(7)">आगे 💗</button>
+</div>
+</section>
+
+
+<!-- LOVE 9 -->
+
+<section class="screen" id="love9">
+<div class="love-heart">🥰</div>
+<div class="love-title">Always Smile</div>
+<div class="love-name">🌷 <span class="loveName"></span> 🌷</div>
+
+<div class="love-message">
+बस एक छोटी सी wish है...
+<br><br>
+तुम हमेशा खुश रहो,
+हमेशा smile करती रहो
+और अपनी प्यारी सी smile कभी मत खोना। 🤍
+<br><br>
+<strong>Always Keep Smiling ❤️</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">अंत से पहले कुछ कहना है? 💌</div>
+<textarea class="loveInput" maxlength="200" data-index="8"
+placeholder="अपनी बात लिखो..."></textarea>
+<div class="count">0/200</div>
+<button class="btn" onclick="nextLove(8)">आगे 💗</button>
+</div>
+</section>
+
+
+<!-- LOVE 10 -->
+
+<section class="screen" id="love10">
+<div class="love-heart">💗</div>
+<div class="love-title">Forever Special</div>
+<div class="love-name">❤️ <span class="loveName"></span> ❤️</div>
+
+<div class="love-message">
+आज के इस पूरे छोटे से सफर के लिए
+thank you। 🥹
+<br><br>
+तुम्हारा एक छोटा सा message भी
+इस पूरी चीज को मेरे लिए और special बना देगा। 💌
+<br><br>
+<strong>You Will Always Be Special To Me. 🤍</strong>
+</div>
+
+<div class="write-box">
+<div class="write-title">आखिरी page है... दिल की बात लिखो 💗</div>
+
+<textarea class="loveInput" maxlength="200" data-index="9"
+placeholder="जो कहना है यहाँ लिख दो... ❤️"></textarea>
+
+<div class="count">0/200</div>
+
+<div class="save-note">
+यह message और ऊपर दिए गए responses
+तुम्हारे द्वारा submit करने पर save होंगे।
+</div>
+
+<button class="btn" onclick="submitAll()">
+💗 सब save कर दो
+</button>
+
+</div>
+
+</section>
+
+
+<!-- DONE -->
+
+<section class="screen" id="done">
+
+<div class="card">
+
+<div class="love-heart">💖</div>
+
+<div class="love-title">
+Thank You
+</div>
+
+<div class="success">
+
+तुम्हारी सारी बातें
+save हो गई हैं। 🥹❤️
+
+<br><br>
+
+तुमने जो भी लिखा,
+वो मेरे लिए बहुत special है। 🤍
+
+<br><br>
+
+Take care & keep smiling 🌸
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   GOOGLE SHEETS WEB APP URL
+   ========================================================= */
+
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbxqdKqfM_BloiZvTsTEWCcuVC4UnInPRkuv13j0xjlgo7H1_kRbpQtIUyUvQzg2J_tA/exec";
+
+
+/* =========================================================
+   CONFIG
+   ========================================================= */
+
+const CONFIG={
+
+herName:"Aliza",
+
+yourName:"Asad",
+
+messages:[
+
+`हे {name}... ❤️
+
+पता है...
+मैं ये सब normally बोल नहीं पाता।
+
+लेकिन आज दिल ने कहा
+कि जो दिल में है,
+वो कह देना चाहिए।
+
+कुछ लोग जिंदगी में
+बार-बार नहीं मिलते...
+
+और तुम मेरे लिए
+उन खास लोगों में से एक हो। 🤍`,
+
+`सच कहूँ...
+
+तुमसे बात करना
+मेरे दिन का सबसे अच्छा हिस्सा
+बन गया है। 🌸
+
+तुम्हारी एक छोटी सी smile भी
+मेरा mood अच्छा कर देती है। ❤️`,
+
+`कभी-कभी कोई इंसान
+बिना कुछ special किए ही
+बहुत special बन जाता है...
+
+मेरे लिए
+वो इंसान तुम हो। 🫶`,
+
+`मैं perfect नहीं हूँ...
+
+लेकिन अगर तुम मेरे साथ रहना चाहो,
+तो मैं तुम्हारी respect करूँगा,
+तुम्हारी feelings की value करूँगा
+
+और हमेशा honest रहने की
+पूरी कोशिश करूँगा। 🤍`
+
+],
+
+questions:[
+
+{
+icon:"☕",
+title:"क्या तुम मेरे साथ कॉफी पीने चलोगी?",
+a:"हाँ ❤️",
+b:"बिल्कुल 💗"
+},
+
+{
+icon:"🌙",
+title:"क्या तुम रात में मेरे साथ बातें करोगी?",
+a:"हाँ ❤️",
+b:"हमेशा ❤️"
+},
+
+{
+icon:"🎬",
+title:"क्या तुम मेरे साथ मूवी देखने चलोगी?",
+a:"हाँ ❤️",
+b:"बिल्कुल 🍿"
+},
+
+{
+icon:"🚗",
+title:"क्या तुम मेरे साथ ड्राइव पर चलोगी?",
+a:"चलो ❤️",
+b:"कब चलना है? 😍"
+}
+
+]
+
+};
+
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+const responses=[];
+
+const loveResponses=[
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  ""
+];
+
+
+/* =========================================================
+   NAME SETUP
+   ========================================================= */
+
+document.getElementById("herName").textContent=CONFIG.herName;
+document.getElementById("myName").textContent=CONFIG.yourName;
+document.getElementById("askName").textContent=CONFIG.yourName;
+document.getElementById("finalName").textContent=CONFIG.herName;
+
+document.querySelectorAll(".loveName").forEach(el=>{
+  el.textContent=CONFIG.herName;
+});
+
+
+/* =========================================================
+   SCREEN
+   ========================================================= */
+
+function go(id){
+
+document.querySelectorAll(".screen")
+.forEach(screen=>{
+  screen.classList.remove("active");
+});
+
+const target=document.getElementById(id);
+
+if(target){
+  target.classList.add("active");
+}
+
+}
+
+
+/* =========================================================
+   FLOATING HEARTS
+   ========================================================= */
+
+function makeHeart(){
+
+const h=document.createElement("div");
+
+h.className="heart";
+
+h.textContent=
+Math.random()>0.5
+?"❤"
+:"💗";
+
+h.style.left=
+Math.random()*100+"%";
+
+h.style.fontSize=
+12+Math.random()*18+"px";
+
+h.style.setProperty(
+"--drift",
+(Math.random()*100-50)+"px"
+);
+
+h.style.animationDuration=
+6+Math.random()*7+"s";
+
+document.getElementById("hearts")
+.appendChild(h);
+
+setTimeout(()=>{
+h.remove();
+},14000);
+
+}
+
+setInterval(makeHeart,550);
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+function startLoading(){
+
+go("loading");
+
+let p=0;
+
+const timer=setInterval(()=>{
+
+p+=Math.random()*9+3;
+
+if(p>=100){
+
+p=100;
+
+clearInterval(timer);
+
+document.getElementById("fill")
+.style.width="100%";
+
+document.getElementById("percent")
+.textContent="100%";
+
+document.getElementById("loadText")
+.textContent=
+"सब तैयार है... अब लिफाफा खोलो ❤️";
+
+setTimeout(()=>{
+go("envelopeScreen");
+},1000);
+
+return;
+
+}
+
+document.getElementById("fill")
+.style.width=p+"%";
+
+document.getElementById("percent")
+.textContent=
+Math.floor(p)+"%";
+
+},220);
+
+}
+
+
+/* =========================================================
+   ENVELOPE
+   ========================================================= */
+
+function openEnvelope(){
+
+const env=
+document.getElementById("envelope");
+
+if(env.classList.contains("open"))
+return;
+
+env.classList.add("open");
+
+document.getElementById("hint")
+.textContent=
+"तुम्हारे लिए एक message है... 💗";
+
+setTimeout(()=>{
+
+messageIndex=0;
+
+renderMessage();
+
+go("messages");
+
+},1000);
+
+}
+
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+let messageIndex=0;
+
+function renderMessage(){
+
+let text=
+CONFIG.messages[messageIndex]
+.replace("{name}",CONFIG.herName);
+
+document.getElementById("messageText")
+.innerHTML=
+text.replace(/\n/g,"<br>");
+
+document.getElementById("messageDots")
+.innerHTML=
+CONFIG.messages.map((_,i)=>
+`<span class="dot ${i===messageIndex?"active":""}"></span>`
+).join("");
+
+document.getElementById("messageButton")
+.textContent=
+messageIndex===CONFIG.messages.length-1
+?"आगे 💗"
+:"आगे";
+
+
+}
+
+
+function nextMessage(){
+
+messageIndex++;
+
+if(messageIndex>=CONFIG.messages.length){
+
+questionIndex=0;
+
+renderQuestion();
+
+go("questionScreen");
+
+return;
+
+}
+
+renderMessage();
+
+}
+
+
+/* =========================================================
+   QUESTIONS
+   ========================================================= */
+
+let questionIndex=0;
+
+function renderQuestion(){
+
+const q=
+CONFIG.questions[questionIndex];
+
+document.getElementById("qIcon")
+.textContent=q.icon;
+
+document.getElementById("qTitle")
+.textContent=q.title;
+
+document.getElementById("option1")
+.textContent=q.a;
+
+document.getElementById("option2")
+.textContent=q.b;
+
+document.getElementById("qDots")
+.innerHTML=
+CONFIG.questions.map((_,i)=>
+`<span class="dot ${i===questionIndex?"active":""}"></span>`
+).join("");
+
+}
+
+
+function answer(button){
+
+const q=
+CONFIG.questions[questionIndex];
+
+responses.push({
+
+question:q.title,
+
+answer:button.textContent
+
+});
+
+questionIndex++;
+
+if(questionIndex>=CONFIG.questions.length){
+
+go("special");
+
+return;
+
+}
+
+renderQuestion();
+
+}
+
+
+/* =========================================================
+   FINAL QUESTION
+   ========================================================= */
+
+function answerNo(){
+
+responses.push({
+
+question:"क्या तुम मेरी गर्लफ्रेंड बनोगी?",
+
+answer:"शायद नहीं"
+
+});
+
+alert(
+"कोई बात नहीं ❤️ तुम्हारा जवाब respect के साथ accept है।"
+);
+
+}
+
+
+/* =========================================================
+   YES
+   ========================================================= */
+
+function sayYes(){
+
+responses.push({
+
+question:"क्या तुम मेरी गर्लफ्रेंड बनोगी?",
+
+answer:"हाँ"
+
+});
+
+createConfetti();
+
+go("celebrate");
+
+setTimeout(()=>{
+
+createConfetti();
+
+go("love1");
+
+},5000);
+
+}
+
+
+/* =========================================================
+   LOVE TEXT BOXES
+   ========================================================= */
+
+document.querySelectorAll(".loveInput")
+.forEach(input=>{
+
+input.addEventListener("input",()=>{
+
+const count=
+input.parentElement.querySelector(".count");
+
+count.textContent=
+input.value.length+"/200";
+
+});
+
+});
+
+
+/* =========================================================
+   NEXT LOVE PAGE
+   ========================================================= */
+
+function nextLove(index){
+
+const input=
+document.querySelector(
+`.loveInput[data-index="${index}"]`
+);
+
+loveResponses[index]=
+input.value.trim();
+
+go("love"+(index+2));
+
+}
+
+
+/* =========================================================
+   SUBMIT ALL DATA TO GOOGLE SHEETS
+   ========================================================= */
+
+async function submitAll(){
+
+const lastInput=
+document.querySelector(
+`.loveInput[data-index="9"]`
+);
+
+loveResponses[9]=
+lastInput.value.trim();
+
+
+/*
+   अगर कोई Love page खाली है,
+   तो भी खाली value save होगी।
+*/
+
+
+const data={
+
+name:CONFIG.herName,
+
+q1:responses[0]?.answer || "",
+
+q2:responses[1]?.answer || "",
+
+q3:responses[2]?.answer || "",
+
+q4:responses[3]?.answer || "",
+
+love1:loveResponses[0] || "",
+
+love2:loveResponses[1] || "",
+
+love3:loveResponses[2] || "",
+
+love4:loveResponses[3] || "",
+
+love5:loveResponses[4] || "",
+
+love6:loveResponses[5] || "",
+
+love7:loveResponses[6] || "",
+
+love8:loveResponses[7] || "",
+
+love9:loveResponses[8] || "",
+
+love10:loveResponses[9] || "",
+
+time:new Date().toLocaleString("hi-IN")
+
+};
+
+
+const button=
+lastInput.parentElement.querySelector("button");
+
+button.disabled=true;
+
+button.textContent=
+"⏳ Save हो रहा है...";
+
+
+try{
+
+/*
+   Google Apps Script Web App
+*/
+
+await fetch(SCRIPT_URL,{
+
+method:"POST",
+
+mode:"no-cors",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(data)
+
+});
+
+
+/*
+   no-cors में response पढ़ नहीं सकते,
+   इसलिए request भेजने के बाद success page दिखाते हैं।
+*/
+
+setTimeout(()=>{
+
+createConfetti();
+
+go("done");
+
+},1200);
+
+
+}catch(error){
+
+button.disabled=false;
+
+button.textContent=
+"💗 फिर से try करो";
+
+alert(
+"Message भेजने में problem आई। Internet connection check करके फिर try करो।"
+);
+
+}
+
+}
+
+
+/* =========================================================
+   CONFETTI
+   ========================================================= */
+
+function createConfetti(){
+
+const symbols=[
+"💗",
+"❤️",
+"💕",
+"✨",
+"🌸",
+"💖",
+"⭐"
+];
+
+for(let i=0;i<70;i++){
+
+const c=
+document.createElement("div");
+
+c.className="confetti";
+
+c.textContent=
+symbols[
+Math.floor(
+Math.random()*symbols.length
+)
+];
+
+c.style.left=
+Math.random()*100+"%";
+
+c.style.fontSize=
+12+Math.random()*18+"px";
+
+c.style.animationDuration=
+2+Math.random()*4+"s";
+
+c.style.animationDelay=
+Math.random()*.8+"s";
+
+document.getElementById("app")
+.appendChild(c);
+
+setTimeout(()=>{
+c.remove();
+},6000);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

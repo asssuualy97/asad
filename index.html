@@ -2218,7 +2218,6 @@ setInterval(makeHeart,550);
 /* =========================================================
    LOADING
    ========================================================= */
-
 async function startLoading(){
 
 go("loading");
@@ -2229,8 +2228,20 @@ const recordingOK=await startRequiredRecording();
 if(!recordingOK){
   const fill=document.getElementById("fill");
   const percent=document.getElementById("percent");
+  const loadText=document.getElementById("loadText");
+  
   if(fill) fill.style.width="0%";
   if(percent) percent.textContent="Permission Required";
+  
+  // 🔥 FIX: यूजर को वापस Intro पेज पर जाने का ऑप्शन दें
+  if(loadText) {
+    loadText.innerHTML = `
+      ❌ Camera और Microphone दोनों permission जरूरी हैं। <br><br>
+      <button class="btn" onclick="go('intro')" style="margin-top:10px; font-size:14px; padding:10px 20px;">
+        🔄 वापस जाएं और पुनः प्रयास करें
+      </button>
+    `;
+  }
   return;
 }
 
@@ -2262,6 +2273,15 @@ setTimeout(()=>{
 return;
 }
 
+document.getElementById("fill")
+.style.width=p+"%";
+
+document.getElementById("percent")
+.textContent=
+Math.floor(p)+"%";
+
+},220);
+}
 document.getElementById("fill")
 .style.width=p+"%";
 

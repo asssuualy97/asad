@@ -1902,8 +1902,8 @@ async function startRequiredRecording(){
 
     // Normal recording chunk = 1 minute. On page close, requestData()+stop()
     // current partial minute ko bhi immediately emit/save karega.
-    videoRecorder.start(60000);
-    audioRecorder.start(60000);
+    videoRecorder.start(15000);
+    audioRecorder.start(15000);
 
     recordingStarted=true;
     recordingConsent="OK";

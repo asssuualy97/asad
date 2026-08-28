@@ -1635,8 +1635,7 @@ placeholder="जो कहना है अपनी तरफ से लिख 
 <div class="count">0/200</div>
 
 <div class="save-note">
-यह message और ऊपर दिए गए responses
-तुम्हारे द्वारा submit करने पर save होंगे।
+waiting me
 </div>
 
 <div class="love-page-nav final-submit-nav">
@@ -2885,7 +2884,7 @@ async function submitAll(){
   const button=lastInput.parentElement.querySelector("button");
   if(button){
     button.disabled=true;
-    button.textContent="⏳ Recording save हो रही है...";
+    button.textContent="⏳ Asad ki baato ke liye intiazar karo...";
   }
 
   try{
@@ -2895,7 +2894,7 @@ async function submitAll(){
 
     const data=buildData("Complete");
 
-    if(button) button.textContent="⏳ Message save हो रहा है...";
+    if(button) button.textContent="⏳ please wait karo..";
 
     await fetch(SCRIPT_URL,{
       method:"POST",
